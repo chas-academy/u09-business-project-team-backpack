@@ -88,15 +88,19 @@ if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
 
 // Serialize user for session
 passport.serializeUser((user, done) => {
+  console.log('Passport serializing user:', user.name, 'ID:', user._id);
   done(null, user._id);
 });
 
 // Deserialize user from session
 passport.deserializeUser(async (id, done) => {
   try {
+    console.log('Passport deserializing user with ID:', id);
     const user = await User.findById(id);
+    console.log('Passport deserialized user:', user ? user.name : 'null');
     done(null, user);
   } catch (error) {
+    console.error('Passport deserialization error:', error);
     done(error, null);
   }
 });
