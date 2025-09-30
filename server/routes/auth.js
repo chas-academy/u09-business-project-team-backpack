@@ -21,6 +21,8 @@ router.get('/google/callback',
   async (req, res) => {
     try {
       console.log('OAuth callback - User authenticated:', req.user);
+      console.log('OAuth callback - SessionID:', req.sessionID);
+      console.log('OAuth callback - Session:', req.session);
       
       // Update last login
       req.user.lastLogin = new Date();
