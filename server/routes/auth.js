@@ -18,13 +18,22 @@ router.get('/google', (req, res, next) => {
 
 router.get('/google/callback', 
   passport.authenticate('google', { failureRedirect: '/login' }),
-  (req, res) => {
-    // Update last login
-    req.user.lastLogin = new Date();
-    req.user.save();
-    
-    // Redirect to frontend with success
-    res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/success`);
+  async (req, res) => {
+    try {
+      console.log('OAuth callback - User authenticated:', req.user);
+      
+      // Update last login
+      req.user.lastLogin = new Date();
+      await req.user.save();
+      
+      console.log('User saved successfully');
+      
+      // Redirect to frontend with success
+      res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/success`);
+    } catch (error) {
+      console.error('Error in OAuth callback:', error);
+      res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/success`);
+    }
   }
 );
 
@@ -63,6 +72,9 @@ router.post('/logout', (req, res, next) => {
 
 // Check authentication status
 router.get('/status', (req, res) => {
+  console.log('Auth status check - isAuthenticated:', req.isAuthenticated());
+  console.log('Auth status check - user:', req.user);
+  
   if (req.isAuthenticated()) {
     res.json({
       authenticated: true,
