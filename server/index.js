@@ -16,6 +16,9 @@ require('./config/passport');
 const app = express();
 const PORT = process.env.PORT || 5001;
 
+// Trust proxy for HTTPS (important for Render)
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:3000',
