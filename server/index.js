@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 5001;
 
 // Middleware
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? false : 'http://localhost:3000',
+  origin: process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:3000',
   credentials: true
 }));
 
@@ -70,8 +70,8 @@ app.use('*', (req, res) => {
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/country-explorer')
   .then(() => {
     console.log('Connected to MongoDB');
-    app.listen(PORT, 'localhost', () => {
-      console.log(`Server running on http://localhost:${PORT}`);
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server running on port ${PORT}`);
     });
   })
   .catch((error) => {
