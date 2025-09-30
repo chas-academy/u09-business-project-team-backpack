@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (provider) => {
-    window.location.href = `/api/auth/${provider}`;
+    window.location.href = `https://country-explorer-backend-acem.onrender.com/api/auth/${provider}`;
   };
 
   const logout = async () => {

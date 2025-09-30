@@ -175,7 +175,7 @@ const Profile = () => {
       sessionStorage.clear();
 
       // Redirect to home page with a message that they need to log in again
-      window.location.href = 'http://localhost:3000/?message=account_deleted';
+      window.location.href = 'https://u09-country-explorer.netlify.app/?message=account_deleted';
     },
   });
 

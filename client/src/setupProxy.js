@@ -4,7 +4,7 @@ module.exports = function setupProxy(app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: process.env.REACT_APP_API_URL || 'http://localhost:5001',
+      target: process.env.REACT_APP_API_URL || 'https://country-explorer-backend-acem.onrender.com',
       changeOrigin: true,
       secure: false,
       cookieDomainRewrite: {
