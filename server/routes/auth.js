@@ -1,0 +1,81 @@
+const express = require('express');
+const passport = require('passport');
+const router = express.Router();
+
+// Google OAuth routes
+router.get('/google', (req, res, next) => {
+  const options = {
+    scope: ['profile', 'email']
+  };
+  
+  // If prompt parameter is provided, add it to force account selection
+  if (req.query.prompt) {
+    options.prompt = req.query.prompt;
+  }
+  
+  passport.authenticate('google', options)(req, res, next);
+});
+
+router.get('/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  (req, res) => {
+    // Update last login
+    req.user.lastLogin = new Date();
+    req.user.save();
+    
+    // Redirect to frontend with success
+    res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/success`);
+  }
+);
+
+// GitHub OAuth routes
+router.get('/github', passport.authenticate('github', {
+  scope: ['user:email']
+}));
+
+router.get('/github/callback',
+  passport.authenticate('github', { failureRedirect: '/login' }),
+  (req, res) => {
+    // Update last login
+    req.user.lastLogin = new Date();
+    req.user.save();
+    
+    // Redirect to frontend with success
+    res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/success`);
+  }
+);
+
+// Logout route
+router.post('/logout', (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    req.session.destroy((err) => {
+      if (err) {
+        return next(err);
+      }
+      res.clearCookie('connect.sid');
+      res.json({ message: 'Logged out successfully' });
+    });
+  });
+});
+
+// Check authentication status
+router.get('/status', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.json({
+      authenticated: true,
+      user: {
+        id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+        avatar: req.user.avatar
+      }
+    });
+  } else {
+    res.json({ authenticated: false });
+  }
+});
+
+module.exports = router;
