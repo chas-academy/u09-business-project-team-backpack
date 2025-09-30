@@ -74,6 +74,8 @@ router.post('/logout', (req, res, next) => {
 router.get('/status', (req, res) => {
   console.log('Auth status check - isAuthenticated:', req.isAuthenticated());
   console.log('Auth status check - user:', req.user);
+  console.log('Auth status check - session:', req.session);
+  console.log('Auth status check - sessionID:', req.sessionID);
   
   if (req.isAuthenticated()) {
     res.json({

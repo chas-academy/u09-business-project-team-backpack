@@ -32,13 +32,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(session({
   secret: process.env.SESSION_SECRET || 'fallback-secret',
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true, // Changed to true to save sessions
   cookie: {
-    secure: process.env.NODE_ENV === 'production',
+    secure: false, // Changed to false for testing
     httpOnly: true,
-    sameSite: 'none', // Changed from 'lax' to 'none' for cross-domain
+    sameSite: 'lax', // Changed back to 'lax'
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    domain: process.env.NODE_ENV === 'production' ? '.netlify.app' : undefined
+    // Removed domain setting
   }
 }));
 
