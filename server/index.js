@@ -41,15 +41,15 @@ app.use(express.urlencoded({ extended: true }));
 // Session configuration
 app.use(session({
   secret: process.env.SESSION_SECRET || 'fallback-secret',
-  resave: true, // Changed to true to force session save
+  resave: true,
   saveUninitialized: true,
   cookie: {
-    secure: false,
-    httpOnly: false, // Changed to false to allow JavaScript access
-    sameSite: 'none', // Changed to 'none' for cross-domain
+    secure: true, // Must be true when sameSite is 'none'
+    httpOnly: true,
+    sameSite: 'none', // Required for cross-domain
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
   },
-  name: 'connect.sid' // Explicit session name
+  name: 'connect.sid'
 }));
 
 // Passport middleware
