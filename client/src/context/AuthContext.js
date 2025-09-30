@@ -23,8 +23,10 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuthStatus = async () => {
     try {
+      // eslint-disable-next-line no-console
       console.log('Checking auth status...');
       const response = await axios.get('/api/auth/status');
+      // eslint-disable-next-line no-console
       console.log('Auth status response:', response.data);
 
       if (response.data.authenticated) {
@@ -33,6 +35,7 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Auth check failed:', error);
       setUser(null);
     } finally {
@@ -53,6 +56,7 @@ export const AuthProvider = ({ children }) => {
       await axios.post('/api/auth/logout', {});
       setUser(null);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Logout failed:', error);
       // Even if logout fails on server, clear local state
       setUser(null);

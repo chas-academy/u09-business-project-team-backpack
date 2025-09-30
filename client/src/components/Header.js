@@ -158,7 +158,7 @@ const Header = () => {
                 <LogoutButton onClick={logout}>Logout</LogoutButton>
               </UserInfo>
             ) : (
-              <GoogleLoginButton onClick={() => { window.location.href = 'http://localhost:5001/api/auth/google?prompt=select_account'; }}>
+              <GoogleLoginButton onClick={() => { window.location.href = 'https://country-explorer-backend-acem.onrender.com/api/auth/google'; }}>
                 Login with Google
               </GoogleLoginButton>
             )}
