@@ -19,6 +19,13 @@ const PORT = process.env.PORT || 5001;
 // Trust proxy for HTTPS (important for Render)
 app.set('trust proxy', 1);
 
+// Debug middleware to log cookies
+app.use((req, res, next) => {
+  console.log('Request cookies:', req.headers.cookie);
+  console.log('Request sessionID:', req.sessionID);
+  next();
+});
+
 // Middleware
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:3000',
@@ -34,15 +41,15 @@ app.use(express.urlencoded({ extended: true }));
 // Session configuration
 app.use(session({
   secret: process.env.SESSION_SECRET || 'fallback-secret',
-  resave: false,
-  saveUninitialized: true, // Changed to true to save sessions
+  resave: true, // Changed to true to force session save
+  saveUninitialized: true,
   cookie: {
-    secure: false, // Changed to false for testing
-    httpOnly: true,
-    sameSite: 'lax', // Changed back to 'lax'
+    secure: false,
+    httpOnly: false, // Changed to false to allow JavaScript access
+    sameSite: 'none', // Changed to 'none' for cross-domain
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    // Removed domain setting
-  }
+  },
+  name: 'connect.sid' // Explicit session name
 }));
 
 // Passport middleware
