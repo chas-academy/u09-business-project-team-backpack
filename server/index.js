@@ -32,22 +32,22 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Session configuration with MongoDB store
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'fallback-secret',
-  resave: false,
-  saveUninitialized: false,
-  store: MongoStore.create({
-    mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost:27017/country-explorer',
-    touchAfter: 24 * 3600 // lazy session update
-  }),
-  cookie: {
-    secure: true,
-    httpOnly: true,
-    sameSite: 'none',
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-  }
-}));
+      // Session configuration with MongoDB store
+      app.use(session({
+        secret: process.env.SESSION_SECRET || 'fallback-secret',
+        resave: true,
+        saveUninitialized: true,
+        store: MongoStore.create({
+          mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost:27017/country-explorer',
+          touchAfter: 24 * 3600 // lazy session update
+        }),
+        cookie: {
+          secure: false, // Changed to false for testing
+          httpOnly: false, // Changed to false for testing
+          sameSite: 'lax', // Changed to lax for testing
+          maxAge: 24 * 60 * 60 * 1000, // 24 hours
+        }
+      }));
 
 // Passport middleware
 app.use(passport.initialize());

@@ -51,17 +51,17 @@ const AuthSuccess = () => {
         // Set user directly in context
         setUser(userData);
         
-        // Redirect to home page after a longer delay so we can see what's happening
+        // Redirect to home page after a short delay
         setTimeout(() => {
           window.location.href = '/';
-        }, 10000); // 10 seconds instead of 2
+        }, 2000);
       } catch (error) {
         console.error('Error parsing user data:', error);
         // Fallback to normal auth check
         checkAuthStatus();
         setTimeout(() => {
           window.location.href = '/';
-        }, 10000); // 10 seconds instead of 2
+        }, 2000);
       }
     } else {
       console.log('No user data in URL, checking auth status normally');
@@ -70,7 +70,7 @@ const AuthSuccess = () => {
         await checkAuthStatus();
         setTimeout(() => {
           window.location.href = '/';
-        }, 10000); // 10 seconds instead of 2
+        }, 2000);
       };
       checkAuth();
     }

@@ -45,7 +45,10 @@ router.get('/google/callback',
           avatar: req.user.avatar
         }));
         
-        res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/success?user=${userData}`);
+        const redirectUrl = `${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/success?user=${userData}`;
+        console.log('Redirecting to:', redirectUrl);
+        
+        res.redirect(redirectUrl);
       });
     } catch (error) {
       console.error('Error in OAuth callback:', error);
