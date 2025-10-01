@@ -20,10 +20,14 @@ const PORT = process.env.PORT || 5001;
 // Trust proxy for HTTPS (important for Render)
 app.set('trust proxy', 1);
 
-// Debug middleware to log cookies
+// Debug middleware to log cookies and session info
 app.use((req, res, next) => {
   console.log('Request cookies:', req.headers.cookie);
   console.log('Request sessionID:', req.sessionID);
+  console.log('Request session exists:', !!req.session);
+  if (req.session) {
+    console.log('Session passport:', req.session.passport);
+  }
   next();
 });
 
@@ -42,19 +46,18 @@ app.use(express.urlencoded({ extended: true }));
 // Session configuration with MongoDB store
 app.use(session({
   secret: process.env.SESSION_SECRET || 'fallback-secret',
-  resave: true,
-  saveUninitialized: true,
+  resave: false,
+  saveUninitialized: false,
   store: MongoStore.create({
     mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost:27017/country-explorer',
     touchAfter: 24 * 3600 // lazy session update
   }),
   cookie: {
-    secure: true, // Must be true when sameSite is 'none'
+    secure: true,
     httpOnly: true,
-    sameSite: 'none', // Required for cross-domain
+    sameSite: 'none',
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
-  },
-  name: 'connect.sid'
+  }
 }));
 
 // Passport middleware
