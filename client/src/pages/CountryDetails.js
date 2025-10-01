@@ -155,7 +155,7 @@ const CountryDetails = () => {
     ['country', name],
     () => fetchCountry(name),
     {
-      enabled: !!name && !!user,
+      enabled: !!name, // Remove !!user requirement
     },
   );
 
@@ -167,8 +167,11 @@ const CountryDetails = () => {
     },
   );
 
-  const getCountryCode = (countryData) => countryData.cca2 || countryData.name;
-  const isCountryInFavorites = (fav) => fav.countryCode === getCountryCode(country);
+  const getCountryCode = (countryData) => countryData?.cca2 || countryData?.name;
+  const isCountryInFavorites = (fav) => {
+    if (!country) return false;
+    return fav.countryCode === getCountryCode(country);
+  };
   const isFavorite = userProfile?.favoriteCountries?.some(isCountryInFavorites);
 
   const addToFavoritesMutation = useMutation(addToFavorites, {
