@@ -30,8 +30,16 @@ router.get('/google/callback',
       
       console.log('User saved successfully');
       
-      // Redirect to frontend with success
-      res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/success`);
+      // Force session save before redirect
+      req.session.save((err) => {
+        if (err) {
+          console.error('Session save error:', err);
+        }
+        console.log('Session saved, redirecting...');
+        
+        // Redirect to frontend with success
+        res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/success`);
+      });
     } catch (error) {
       console.error('Error in OAuth callback:', error);
       res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/success`);
