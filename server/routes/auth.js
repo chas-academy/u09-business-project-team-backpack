@@ -48,6 +48,15 @@ router.get('/google/callback',
         const redirectUrl = `${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/success?user=${userData}`;
         console.log('Redirecting to:', redirectUrl);
         
+        // Set session cookie explicitly with proper cross-site settings
+        res.cookie('connect.sid', req.sessionID, {
+          secure: true,
+          httpOnly: true,
+          sameSite: 'none',
+          maxAge: 24 * 60 * 60 * 1000,
+          domain: undefined // Let browser determine domain
+        });
+        
         res.redirect(redirectUrl);
       });
     } catch (error) {

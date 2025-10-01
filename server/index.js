@@ -42,9 +42,9 @@ app.use(express.urlencoded({ extended: true }));
           touchAfter: 24 * 3600 // lazy session update
         }),
         cookie: {
-          secure: false, // Changed to false for testing
-          httpOnly: false, // Changed to false for testing
-          sameSite: 'lax', // Changed to lax for testing
+          secure: true, // Must be true for sameSite: 'none'
+          httpOnly: true, // Security best practice
+          sameSite: 'none', // Required for cross-site cookies
           maxAge: 24 * 60 * 60 * 1000, // 24 hours
         }
       }));
