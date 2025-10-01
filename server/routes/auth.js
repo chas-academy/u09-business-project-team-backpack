@@ -30,12 +30,20 @@ router.get('/google/callback',
       
       console.log('User saved successfully');
       
-      // Force session save before redirect
+      // Force session save and set cookie explicitly
       req.session.save((err) => {
         if (err) {
           console.error('Session save error:', err);
         }
-        console.log('Session saved, redirecting...');
+        console.log('Session saved, setting cookie and redirecting...');
+        
+        // Set the session cookie explicitly
+        res.cookie('connect.sid', req.sessionID, {
+          secure: true,
+          httpOnly: true,
+          sameSite: 'none',
+          maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        });
         
         // Redirect to frontend with success
         res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/success`);
