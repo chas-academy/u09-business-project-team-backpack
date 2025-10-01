@@ -69,6 +69,7 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     checkAuthStatus,
+    setUser,
   }), [user, loading]);
 
   return (

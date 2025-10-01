@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../context/AuthContext';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { useSearchParams } from 'react-router-dom';
 
 const AuthSuccessContainer = styled.div`
   display: flex;
@@ -33,21 +34,44 @@ const SuccessMessage = styled.div`
 `;
 
 const AuthSuccess = () => {
-  const { checkAuthStatus } = useAuth();
+  const { checkAuthStatus, setUser } = useAuth();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    // Check authentication status after OAuth callback
-    const checkAuth = async () => {
-      await checkAuthStatus();
-
-      // Redirect to home page after a short delay
-      setTimeout(() => {
-        window.location.href = '/';
-      }, 2000);
-    };
-
-    checkAuth();
-  }, [checkAuthStatus]);
+    // Check if user data is in URL params
+    const userParam = searchParams.get('user');
+    
+    if (userParam) {
+      try {
+        const userData = JSON.parse(decodeURIComponent(userParam));
+        console.log('User data from URL:', userData);
+        
+        // Set user directly in context
+        setUser(userData);
+        
+        // Redirect to home page after a short delay
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 2000);
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        // Fallback to normal auth check
+        checkAuthStatus();
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 2000);
+      }
+    } else {
+      // No user data in URL, check authentication status normally
+      const checkAuth = async () => {
+        await checkAuthStatus();
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 2000);
+      };
+      checkAuth();
+    }
+  }, [checkAuthStatus, setUser, searchParams]);
 
   return (
     <AuthSuccessContainer>

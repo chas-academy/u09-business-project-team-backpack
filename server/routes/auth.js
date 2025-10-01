@@ -30,23 +30,22 @@ router.get('/google/callback',
       
       console.log('User saved successfully');
       
-      // Force session save and set cookie explicitly
+      // Force session save and redirect with user data
       req.session.save((err) => {
         if (err) {
           console.error('Session save error:', err);
         }
-        console.log('Session saved, setting cookie and redirecting...');
+        console.log('Session saved, redirecting with user data...');
         
-        // Set the session cookie explicitly
-        res.cookie('connect.sid', req.sessionID, {
-          secure: true,
-          httpOnly: true,
-          sameSite: 'none',
-          maxAge: 24 * 60 * 60 * 1000 // 24 hours
-        });
+        // Redirect to frontend with user data in URL params
+        const userData = encodeURIComponent(JSON.stringify({
+          id: req.user._id,
+          name: req.user.name,
+          email: req.user.email,
+          avatar: req.user.avatar
+        }));
         
-        // Redirect to frontend with success
-        res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/success`);
+        res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/success?user=${userData}`);
       });
     } catch (error) {
       console.error('Error in OAuth callback:', error);
