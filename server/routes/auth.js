@@ -122,4 +122,29 @@ router.get('/status', (req, res) => {
   }
 });
 
+// Simple test endpoint to get user data without session dependency
+router.get('/test-user', async (req, res) => {
+  try {
+    // Get the most recent user (for testing)
+    const User = require('../models/User');
+    const user = await User.findOne().sort({ lastLogin: -1 });
+    
+    if (user) {
+      res.json({
+        success: true,
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          avatar: user.avatar
+        }
+      });
+    } else {
+      res.json({ success: false, message: 'No user found' });
+    }
+  } catch (error) {
+    res.json({ success: false, error: error.message });
+  }
+});
+
 module.exports = router;
