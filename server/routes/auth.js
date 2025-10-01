@@ -54,7 +54,8 @@ router.get('/google/callback',
           httpOnly: true,
           sameSite: 'none',
           maxAge: 24 * 60 * 60 * 1000,
-          domain: undefined // Let browser determine domain
+          domain: undefined, // Let browser determine domain
+          partitioned: true // Required for cross-site cookies in modern browsers
         });
         
         res.redirect(redirectUrl);

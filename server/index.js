@@ -46,6 +46,7 @@ app.use(express.urlencoded({ extended: true }));
           httpOnly: true, // Security best practice
           sameSite: 'none', // Required for cross-site cookies
           maxAge: 24 * 60 * 60 * 1000, // 24 hours
+          partitioned: true, // Required for cross-site cookies in modern browsers
         }
       }));
 
