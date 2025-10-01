@@ -40,6 +40,8 @@ const AuthSuccess = () => {
   useEffect(() => {
     // Check if user data is in URL params
     const userParam = searchParams.get('user');
+    console.log('AuthSuccess - URL search params:', searchParams.toString());
+    console.log('AuthSuccess - user param:', userParam);
     
     if (userParam) {
       try {
@@ -49,25 +51,26 @@ const AuthSuccess = () => {
         // Set user directly in context
         setUser(userData);
         
-        // Redirect to home page after a short delay
+        // Redirect to home page after a longer delay so we can see what's happening
         setTimeout(() => {
           window.location.href = '/';
-        }, 2000);
+        }, 10000); // 10 seconds instead of 2
       } catch (error) {
         console.error('Error parsing user data:', error);
         // Fallback to normal auth check
         checkAuthStatus();
         setTimeout(() => {
           window.location.href = '/';
-        }, 2000);
+        }, 10000); // 10 seconds instead of 2
       }
     } else {
+      console.log('No user data in URL, checking auth status normally');
       // No user data in URL, check authentication status normally
       const checkAuth = async () => {
         await checkAuthStatus();
         setTimeout(() => {
           window.location.href = '/';
-        }, 2000);
+        }, 10000); // 10 seconds instead of 2
       };
       checkAuth();
     }
