@@ -25,16 +25,17 @@ export const AuthProvider = ({ children }) => {
     try {
       // eslint-disable-next-line no-console
       console.log('Checking auth status...');
-      
+
       // Try the test endpoint first
       const testResponse = await axios.get('/api/auth/test-user');
+      // eslint-disable-next-line no-console
       console.log('Test endpoint response:', testResponse.data);
-      
+
       if (testResponse.data.success) {
         setUser(testResponse.data.user);
         return;
       }
-      
+
       // Fallback to normal auth check
       const response = await axios.get('/api/auth/status');
       // eslint-disable-next-line no-console
